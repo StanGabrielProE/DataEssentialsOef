@@ -1,0 +1,158 @@
+Geef van elke medewerker het nummer en de naam van de afdeling waarvoor hij/zij werkt.
+1> select m. naam, m.voorn, a.naam from medewerkers m INNER JOIN afdelingen a
+2> ON m.afd = a.anr
+3> Go
+naam            voorn        naam
+--------------- ------------ ---------------
+CASPERS         JANA         OPLEIDINGEN
+ALLARD          NELE         VERKOOP
+DEFOUR          THOMAS       VERKOOP
+JACOBS          EMMA         OPLEIDINGEN
+MARTENS         RAF          VERKOOP
+BRIERS          ANDREA       VERKOOP
+CLERCKX         AN           HOOFDKANTOOR
+SWINNEN         CHRIS        OPLEIDINGEN
+DE KONING       LIEVE        HOOFDKANTOOR
+DEN RUYTER      JOACHIM      VERKOOP
+SLECHTEN        TOM          OPLEIDINGEN
+JACOBS          SIMON        VERKOOP
+DE COOMAN       DORIEN       OPLEIDINGEN
+WOUTERS         SVEN         HOOFDKANTOOR
+
+(14 rows affected)
+
+Geef de naam en het salaris van elke medewerker die meer verdient dan Clerckx.
+1> select Concat(naam," ", voorn) AS "Full Name",maandsal from Medewerkers where maandsal >3450
+2> GO
+Full Name                    maandsal
+---------------------------- --------
+JACOBS EMMA                   4975.00
+BRIERS ANDREA                 5850.00
+SWINNEN CHRIS                 4000.00
+DE KONING LIEVE               7000.00
+DE COOMAN DORIEN              4000.00
+
+(5 rows affected)
+1>
+
+Geef de namen van de medewerkers die in dezelfde afdeling werken als Wouters.
+1> select naam from medewerkers where afd >10
+2> GO
+naam
+---------------
+CASPERS
+ALLARD
+DEFOUR
+JACOBS
+MARTENS
+BRIERS
+SWINNEN
+DEN RUYTER
+SLECHTEN
+JACOBS
+DE COOMAN
+
+(11 rows affected)
+1>
+
+Geef het nummer van elke medewerker die in de afdeling verkoop werkt.
+1> select m.mnr from medewerkers m inner join afdelingen a ON m.afd = a.anr where  a.naam ="verkoop"
+2> GO
+mnr
+-----------
+       7499
+       7521
+       7654
+       7698
+       7844
+       7900
+
+(6 rows affected)
+Geef het nummer van elke medewerker gevolgd door de naam van zijn of haar baas.
+mnr         naam            Baas            Baas nr
+----------- --------------- --------------- -----------
+       7369 CASPERS         DE COOMAN              7902
+       7499 ALLARD          BRIERS                 7698
+       7521 DEFOUR          BRIERS                 7698
+       7566 JACOBS          DE KONING              7839
+       7654 MARTENS         BRIERS                 7698
+       7698 BRIERS          DE KONING              7839
+       7782 CLERCKX         DE KONING              7839
+       7788 SWINNEN         JACOBS                 7566
+       7844 DEN RUYTER      BRIERS                 7698
+       7876 SLECHTEN        SWINNEN                7788
+       7900 JACOBS          BRIERS                 7698
+       7902 DE COOMAN       JACOBS                 7566
+       7934 WOUTERS         CLERCKX                7782
+
+(13 rows affected)
+1>
+
+Geef van elke medewerker het mnr en de naam van de afdeling waarvoor hij of zij werkt.
+1> select m. naam, m.voorn, a.naam from medewerkers m INNER JOIN afdelingen a
+2> ON m.afd = a.anr
+3> Go
+naam            voorn        naam
+--------------- ------------ ---------------
+CASPERS         JANA         OPLEIDINGEN
+ALLARD          NELE         VERKOOP
+DEFOUR          THOMAS       VERKOOP
+JACOBS          EMMA         OPLEIDINGEN
+MARTENS         RAF          VERKOOP
+BRIERS          ANDREA       VERKOOP
+CLERCKX         AN           HOOFDKANTOOR
+SWINNEN         CHRIS        OPLEIDINGEN
+DE KONING       LIEVE        HOOFDKANTOOR
+DEN RUYTER      JOACHIM      VERKOOP
+SLECHTEN        TOM          OPLEIDINGEN
+JACOBS          SIMON        VERKOOP
+DE COOMAN       DORIEN       OPLEIDINGEN
+WOUTERS         SVEN         HOOFDKANTOOR
+
+(14 rows affected)
+
+Welke medewerkers verdienen meer dan hun baas wanneer het salaris van de baas met 1000 EUR verminderd wordt?
+
+1> select m.mnr ,m.naam , m.maandsal , b.naam, b.maandsal -1000 as "Baas Salaris",b.mnr from medewerkers m INNER JOIN
+2> medewerkers b ON b.mnr = m.chef where m.maandsal > b.maandsal
+3> GO
+mnr         naam            maandsal naam            Baas Salaris mnr
+----------- --------------- -------- --------------- ------------ -----------
+
+(0 rows affected)
+1>
+
+Geef de namen van de chef (ook van De Koning) en hun ondergeschikten.
+1> SELECT o.naam AS medewerker, o.functie, b.naam AS baas, b.functie
+2> FROM medewerkers o
+3> INNER JOIN medewerkers b ON o.chef = b.mnr
+4> GO
+medewerker      functie    baas            functie
+--------------- ---------- --------------- ----------
+CASPERS         TRAINER    DE COOMAN       TRAINER
+ALLARD          VERKOPER   BRIERS          MANAGER
+DEFOUR          VERKOPER   BRIERS          MANAGER
+JACOBS          MANAGER    DE KONING       DIRECTEUR
+MARTENS         VERKOPER   BRIERS          MANAGER
+BRIERS          MANAGER    DE KONING       DIRECTEUR
+CLERCKX         MANAGER    DE KONING       DIRECTEUR
+SWINNEN         TRAINER    JACOBS          MANAGER
+DEN RUYTER      VERKOPER   BRIERS          MANAGER
+SLECHTEN        TRAINER    SWINNEN         TRAINER
+JACOBS          BOEKHOUDER BRIERS          MANAGER
+DE COOMAN       TRAINER    JACOBS          MANAGER
+WOUTERS         BOEKHOUDER CLERCKX         MANAGER
+
+
+Geef de namen van alle afdelingen en de naam van het afdelingshoofd.
+1> select a. naam ,m.naam from afdelingen a inner join medewerkers m  ON a.hoofd = m.mnr
+2> GO
+naam            naam
+--------------- ---------------
+HOOFDKANTOOR    CLERCKX
+OPLEIDINGEN     JACOBS
+VERKOOP         BRIERS
+PERSONEELSZAKEN DE KONING
+
+(4 rows affected)
+1>
