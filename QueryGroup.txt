@@ -1,0 +1,226 @@
+1
+
+
+ SELECT COUNT(mnr), 
+afd FROM medewerkers
+GROUP BY afd
+GO
+
+
+
+2  
+
+SELECT AVG(maandsal),afd from Medewerkers
+GROUP BY afd
+GO
+
+3
+
+
+SELECT COUNT (mnr) ,afd FROM medewerkers
+WHERE afd in (SELECT afd from medewerkers where naam like '%oo%')
+GROUP BY afd
+GO
+
+
+4
+
+
+SELECT COUNT (mnr) ,afd 
+                 FROM medewerkers
+				 GROUP BY afd
+				 Having afd >10
+				 GO
+				 
+				 
+				 
+				 
+				 
+5				 
+
+
+SELECT MIN(maandsal) AS 'Min Sal',
+	   MAX(maandsal) AS 'Max sal',
+	   afd 
+	   FROM medewerkers 
+	   GROUP by afd
+	   GO
+	   
+	   
+6
+
+
+SELECT m.naam,
+       m.maandsal
+	   FROM medewerkers m INNER JOIN
+	   (SELECT MAX(maandsal) AS max FROM medewerkers)x
+	   ON m.maandsal = x.max	
+	   GO
+	   
+	   
+	   
+7
+
+SELECT COUNT (mnr) as 'Antaal',
+		AVG(maandsal) as 'average',
+		afd, functie
+		FROM medewerkers
+		GROUP by afd,functie
+		GO
+		
+
+
+8
+
+SELECT COUNT (mnr),
+       afd
+	   FROM medewerkers
+	   GROUP BY afd
+	   Having COUNT(mnr) >3
+	   GO	
+
+
+
+
+9
+SELECT Distinct m.naam ,m.maandsal,m.afd
+		FROM medewerkers m
+		INNER JOIN (SELECT 
+		AVG(maandsal) as 'avg'
+		,afd
+		FROM medewerkers
+		GROUP BY afd) x
+		ON m.maandsal > x.avg
+		ORDER BY m.maandsal desc
+		GO	   
+
+
+10
+
+SELECT naam ,maandsal
+		FROM medewerkers
+		WHERE maandsal >(SELECT 
+		avg(maandsal)FROM medewerkers)
+		GO
+11
+SELECT m.naam ,m.maandsal ,m.afd
+			FROM medewerkers m 
+			INNER JOIN 
+			(SELECT avg(maandsal) as 'avg',
+					afd FROM medewerkers
+					GROUP BY afd)x
+				ON m.maandsal > x.avg AND
+				m.afd = x.afd
+				GO
+12
+SELECT cursist , COUNT (cursus)
+FROM Inschrijvingen 
+GROUP BY cursist
+GO
+13
+
+SELECT AVG(maandsal) as 'avg',
+		afd 
+		FROM medewerkers
+		WHERE afd in 
+		(SELECT 
+		afd
+		FROM medewerkers
+		WHERE naam = "Den Ruyter")
+		GROUP BY afd
+		GO
+		
+		
+14
+SELECT COUNT (mnr) as 'medewerkers'
+				FROM medewerkers m 
+				INNER JOIN 
+				(SELECT (AVG(maandsal) + 200) AS 'max'
+				FROM medewerkers) x
+				ON m.maandsal < x.max
+				GO
+
+
+
+15
+
+				
+SELECT
+	 m.naam,
+	 m.maandsal
+	 FROM medewerkers m
+	 INNER JOIN (
+	 SELECT MAX(maandsal) as 'max',
+	 afd
+	 FROM medewerkers
+	 GROUP BY afd
+	 ) x
+	 ON m.maandsal = x.max
+	 GO		
+	 
+16
+SELECT m.naam,m.maandsal
+		FROM medewerkers m
+		INNER JOIN (SELECT 
+					TOP 5 naam, maandsal
+					FROM medewerkers
+					ORDER BY maandsal) v
+					on m.naam= v.naam 
+					and
+					m.maandsal =v.maandsal
+					ORDER BY maandsal DESC
+					GO
+
+
+
+
+18
+
+SELECT TOP 3 m.naam ,
+			m.maandsal
+			FROM medewerkers  m
+			INNER JOIN (SELECT
+			anr from afdelingen
+			WHERE naam = 'verkoop') a
+			ON m.afd = a.anr
+			ORDER BY maandsal DESC
+			GO
+			
+19 
+SELECT TOP 1 AVG(maandsal) 'avg',
+             afd
+			 FROM medewerkers 
+			 GROUP BY afd
+			 ORDER BY avg DESC
+			 GO
+
+20
+
+SELECT DISTINCT m.afd , a.naam 
+		FROM medewerkers m
+		INNER JOIN afdelingen a
+		ON m.afd = a.anr 
+		INNER JOIN (SELECT 
+					TOP 1 AVG(maandsal) as 'MAX',
+					afd 
+					FROM medewerkers 
+					GROUP BY afd 
+					ORDER BY MAX desc) x
+					ON m.afd =x.afd AND x.afd = a.anr
+					GO
+					
+					
+22
+
+SELECT afd , functie,
+		avg(maandsal) as 'avg',
+		COUNT (mnr) 'totaal nr'
+		FROM medewerkers
+		GROUP BY afd , functie
+		GO
+							
+					
+
+
+
+					

@@ -1,0 +1,204 @@
+1
+
+SELECT m.naam as "medewerker"
+			, a.naam as "afdeling"
+			FROM medewerkers m 
+			INNER JOIN 
+			afdelingen a
+			ON m.afd = a.anr 
+			
+			GO
+			
+			
+2.
+
+SELECT 
+		m.naam , m.maandsal 
+		FROM medewerkers m 
+		INNER JOIN 
+		(SELECT mnr , maandsal from medewerkers 
+		WHERE naam= 'Caspers') x
+		ON m.maandsal > x.maandsal
+		GO
+       
+3 
+
+
+SELECT m.naam ,m.afd 
+			FROM medewerkers m 
+			INNER JOIN 
+			(SELECT naam,
+				afd FROM medewerkers
+					WHERE naam = 'Wouters')x
+			ON m.afd = x.afd AND m.naam != x.naam
+			GO
+			
+4 
+
+
+SELECT 
+		m.mnr , m.naam 
+	FROM medewerkers m 
+	INNER JOIN 
+	(SELECT anr from afdelingen
+		WHERE naam = "verkoop") x
+		on m.afd = x.anr
+		GO			
+		
+		
+5
+
+
+SELECT 
+  m.mnr ,b.naam
+  FROM medewerkers m 
+  INNER JOIN medewerkers b
+  on m.chef = b.mnr
+  GO		
+  
+  
+  
+  6
+  
+  
+ SELECT m.mnr ,a.naam 
+		FROM medewerkers m 
+		INNER JOIN 
+		afdelingen  a
+		ON m.afd = a.anr 
+		GO
+		
+		
+7
+
+
+    SELECT m.naam 
+		FROM medewerkers m 
+		INNER JOIN 
+		medewerkers b
+		ON b.mnr = m.chef AND 
+		b.maandsal -1000 < m.maandsal
+		GO
+
+
+8
+
+SELECT 
+	b.naam , o.naam
+	FROM medewerkers b
+	RIGHT JOIN 
+	medewerkers o
+	ON b.mnr = o.chef
+	GO
+	
+	
+9
+
+
+SELECT CONCAT(m.naam ,' ',m.voorn) as 'FULL NAAM'
+		FROM medewerkers m 
+	INNER JOIN afdelingen a 
+	ON m.afd = a.anr 
+	INNER JOIN inschrijvingen i
+	ON m.mnr = i.cursist 
+	INNER JOIN 
+	uitvoeringe u
+	ON
+	CONCAT(i.cursus,i.begindatum) = CONCAT(u.cursus,ubegindatum)
+	AND a.naam = u.locatie
+	GO
+	
+
+10
+
+
+SELECT DISTINCT m .naam, a.locatie from afdelingen a
+            INNER JOIN 
+			Uitvoeringen u
+			ON a.locatie = u.locatie INNER JOIN
+			medewerkers m on m.afd= a.anr
+			GO
+			
+			
+11
+
+
+SELECT DISTINCT m .naam, a.locatie from afdelingen a
+            INNER JOIN 
+			Uitvoeringen u
+			ON a.locatie = u.locatie INNER JOIN
+			medewerkers m on m.afd= a.anr
+			GO
+
+12
+
+
+
+	SELECT DISTINCT m.naam 	
+	FROM medewerkers m 
+	INNER JOIN inschrijvingen i 
+	ON m.mnr = i.cursist 
+	INNER JOIN inschrijvingen chef 
+	ON chef.cursist = m.chef 
+	WHERE i.cursus = chef.cursus
+	GO
+	
+	
+
+14
+
+
+SELECT CONCAT(m.naam ,' ' ,m.voorn),
+		CONCAT(d.naam,' ' ,d.voorn) AS 'docent' ,
+		c.omschrijving AS 'cursus'
+		FROM inschrijvingen i
+		INNER JOIN uitvoeringen u
+		ON CONCAT(i.cursus,i.begindatum) =CONCAT(u.cursus,u.begindatum)
+		INNER JOIN cursussen c
+		ON u.cursus = c.code
+		INNER JOIN medewerkers m 
+		ON m.mnr = i.cursist 
+		INNER JOIN medewerkers d
+		ON d.mnr = u.docent
+		ORDER BY d.naam
+		GO
+
+	
+15
+
+SELECT 
+	COALESCE(m.naam,'==onbekend==') AS 'Docent',
+	u.begindatum,c.omschrijving
+	FROM medewerkers m 
+	FULL OUTER JOIN uitvoeringen u
+	ON 
+	m.mnr = u.docent
+	INNER JOIN cursussen c
+	ON u.cursus = c.code
+GO	
+
+
+
+
+16
+
+SELECT 
+	m.naam AS 'cursist'
+	,b.naam AS 'chef'
+	,a.naam AS  'Afdeling'
+ 	,d.naam  AS 'Docent'
+	,c.omschrijving
+	FROM inschrijvingen i
+	INNER JOIN medewerkers m
+	ON m.mnr = i.cursist 
+	INNER JOIN medewerkers b
+	ON m.chef = b.mnr
+	INNER JOIN uitvoeringen u
+	ON CONCAT(i.cursus,i.begindatum) =CONCAT(u.cursus,u.begindatum)
+	FULL OUTER JOIN  medewerkers d 
+	ON d.mnr = u.docent
+	INNER JOIN afdelingen a
+	on m.afd = a.anr 
+	INNER JOIN cursussen c
+	ON c.code = u.cursus
+	GO
